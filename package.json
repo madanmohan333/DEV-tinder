@@ -1,0 +1,22 @@
+{
+  "name": "dev-tinder",
+  "version": "1.0.0",
+  "description": "pahla nasha,pahla guman",
+  "keywords": [
+    "madan",
+    "node",
+    "js",
+    "bade",
+    "bhaiya"
+  ],
+  "license": "ISC",
+  "author": "madan baap dev",
+  "type": "commonjs",
+  "main": "logic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
