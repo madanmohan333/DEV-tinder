@@ -1,21 +1,45 @@
 const express=require('express');
 const app=express();
-const pass='bhai yar padle,chup gandu'
-// app.use('/',(req,res)=>{
-//     res.send(`yes it is ${pass}`);
-//     // // console.log(res);
-//     // console.log("madan bhaiua");
-// })
-app.get('/test',(req,res)=>{
-    // res.send(`le bhaiya}`);
-    // // console.log(res);
-    // console.log("madan bhaiua");
+const {connectdb}=require("./config/database")
+const User=require("./models/user");
+
+app.use(express.json());
+app.post('/signup',async(req,res)=>{
+      const data=req.body;
+      const user=new User(data);
+      try{
+          await user.save();
+          res.send("user saved successfully")
+      }catch(err){
+          res.send("error"+err.message);
+      }
+
+} )
+app.get('/feed',async(req,res)=>{
+        const cityName=req.body.city;
+        const user=await User.find({"city":"etah"});
+        res.send(user);
+});
+app.patch('/data',async(req,res)=>{
+      const userId=req.body.userId;
+       const data=req.body;
+       try{
+          await User.findByIdAndUpdate({_id:userId},data);
+          res.send("data upadted successfully");
+       }
+       catch{
+        res.send("error while updating");
+       }
 })
-app.use('/',(req,res)=>{
-    res.send(`yes it is ${pass}`);
-    // // console.log(res);
-    // console.log("madan bhaiua");
-})
-app.listen(3000,'0.0.0.0',()=>{
-    console.log("oh yess fuck baby");
-})
+
+
+connectdb().
+   then(()=>{
+       console.log("database connection established");
+       app.listen(3000,'0.0.0.0',()=>{
+         console.log("server started");
+       })
+   })
+   .catch(()=>{
+      console.log("can not connect to cluster;");
+   })
