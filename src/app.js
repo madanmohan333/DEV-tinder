@@ -5,6 +5,8 @@ const User=require("./models/user");
 const bcrypt=require("bcrypt");
 const validator=require("validator");
 const cookieParser=require("cookie-parser");
+const jwt=require('jsonwebtoken');
+const {userAuth}=require('./middlewares/auth');
 app.use(cookieParser());
 app.use(express.json());
 app.use('/siii',(req,res)=>{
@@ -27,10 +29,11 @@ app.post('/signup',async(req,res)=>{
     }
 
 } )
-app.get('/feed',async(req,res)=>{
-        const cityName=req.body.city;
-        const user=await User.find({"city":"etah"});
-        res.send(user);
+app.get('/feed',(req,res)=>{
+        // const cityName=req.body.city;
+        // const user=await User.find({"city":"etah"});
+        // res.send(user);
+        res.send("hello world");
 });
 app.patch('/data',async(req,res)=>{
       const userId=req.body.userId;
@@ -56,6 +59,8 @@ app.post("/login",async(req,res)=>{
         }
         const isPassword=await bcrypt.compare(password,userMail.password);
         if(isPassword){
+            const token= await jwt.sign({_id:userMail._id},"madanMadar5632",)
+            res.cookie("token",token);
             res.send("user login successfull");
         }else{
             throw new Error("incorrect password");
@@ -65,7 +70,9 @@ app.post("/login",async(req,res)=>{
     }
 
 })
-
+app.get('/profile',userAuth,async(req,res)=>{
+     5
+})
 connectdb()
    .then(()=>{
        console.log("database connection established");
